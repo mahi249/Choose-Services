@@ -189,8 +189,7 @@
 
     const serviceValue = checked.map(c => c.value).join(';');
 
-    const apiUrl = 'https://www.zohoapis.com/crm/v7/functions/save_chosen_services/actions/execute?auth_type=apikey&zapikey=1003.1e192ce9b0c9b8a74d24c1443b5d1e0a.68073384ae8f1acb1964351174d1a59d';
-
+    const apiUrl = const apiUrl = 'https://www.zohoapis.com.au/crm/v7/functions/save_chosen_services/actions/execute?auth_type=apikey&zapikey=1003.1e192ce9b0c9b8a74d24c1443b5d1e0a.68073384ae8f1acb1964351174d1a59d';
     try {
       const response = await fetch(apiUrl, {
         method: 'POST',
