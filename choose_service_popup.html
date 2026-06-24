@@ -183,23 +183,20 @@
     saveBtn.textContent = 'Saving...';
     setStatus('', '');
 
-    const serviceValue = const serviceValue = JSON.stringify(checked.map(function(c) { return c.value; }));
+    const serviceValue = JSON.stringify(checked.map(function(c) { return c.value; }));
     const webhookUrl = 'https://flow.zoho.com/708863980/flow/webhook/incoming?zapikey=1001.43514faac1023cef9c7ff70131113150.d7e41b8eafa354f152a2bf8fb56d8631&isdebug=false';
 
-    // Remove any existing iframe/form
     const oldFrame = document.getElementById('hidden_frame');
     const oldForm  = document.getElementById('hidden_form');
     if (oldFrame) oldFrame.remove();
     if (oldForm)  oldForm.remove();
 
-    // Create hidden iframe
     const iframe = document.createElement('iframe');
     iframe.id   = 'hidden_frame';
     iframe.name = 'hidden_frame';
     iframe.style.display = 'none';
     document.body.appendChild(iframe);
 
-    // Create hidden form
     const form = document.createElement('form');
     form.id     = 'hidden_form';
     form.method = 'POST';
@@ -222,7 +219,6 @@
     document.body.appendChild(form);
     form.submit();
 
-    // Show success after short delay
     setTimeout(function() {
       setStatus('✓ Services saved successfully!', 'success');
       saveBtn.textContent = 'Saved ✓';
