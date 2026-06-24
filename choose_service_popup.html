@@ -136,7 +136,7 @@
 
 <script>
   const params   = new URLSearchParams(window.location.search);
-  const dealId   = (params.get('dealid') || params.get('id') || '').replace(/[^0-9]/g, '');
+  const dealId   = params.get('dealid') || params.get('id') || '';
   const dealName = params.get('dealname') || '';
 
   document.getElementById('dealInfo').textContent =
@@ -207,7 +207,7 @@
     const f1 = document.createElement('input');
     f1.type  = 'hidden';
     f1.name  = 'dealid';
-    f1.value = dealId;
+    f1.value =```f1.value = dealId.toString().replace(/[^0-9]/g, '');```
     form.appendChild(f1);
 
     const f2 = document.createElement('input');
