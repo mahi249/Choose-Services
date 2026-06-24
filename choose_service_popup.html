@@ -185,11 +185,30 @@
     const webhookUrl = 'https://flow.zoho.com/708863980/flow/webhook/incoming?zapikey=1001.43514faac1023cef9c7ff70131113150.d7e41b8eafa354f152a2bf8fb56d8631&isdebug=false';
 
     try {
-      await fetch(webhookUrl, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ dealid: dealId, services: serviceValue })
+      // Send via form POST to avoid CORS
+const form = document.createElement('form');
+form.method = 'POST';
+form.action = webhookUrl;
+form.target = 'hidden_frame';
+form.style.display = 'none';
+
+const addField = (name, value) => {
+  const input = document.createElement('input');
+  input.type = 'hidden';
+  input.name = name;
+  input.value = value;
+  form.appendChild(input);
+};
+
+addField('dealid', dealId);
+addField('services', serviceValue);
+
+const iframe = document.createElement('iframe');
+iframe.name = 'hidden_frame';
+iframe.style.display = 'none';
+document.body.appendChild(iframe);
+document.body.appendChild(form);
+form.submit();
       });
 
       setStatus('✓ Services saved successfully!', 'success');
