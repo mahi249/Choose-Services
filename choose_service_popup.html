@@ -1,241 +1,653 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Select Services</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 20px; }
-  .popup { background: #fff; border-radius: 10px; box-shadow: 0 4px 24px rgba(0,0,0,0.13); width: 100%; max-width: 860px; overflow: hidden; }
-  .popup-header { background: #303030; color: #fff; padding: 18px 28px; display: flex; align-items: center; justify-content: space-between; }
-  .popup-header h2 { font-size: 18px; font-weight: 600; letter-spacing: 0.3px; }
-  .deal-info { font-size: 12px; color: #aaa; margin-top: 3px; }
-  .popup-body { padding: 22px 28px 10px; max-height: 520px; overflow-y: auto; }
-  .category { margin-bottom: 20px; }
-  .category-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #3c7d3c; border-bottom: 2px solid #3c7d3c; padding-bottom: 5px; margin-bottom: 10px; }
-  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px 12px; }
-  .service-item { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; cursor: pointer; transition: background 0.15s; border: 1.5px solid transparent; }
-  .service-item:hover { background: #f0f7f0; border-color: #b8d8b8; }
-  .service-item.selected { background: #e8f5e8; border-color: #3c7d3c; }
-  .service-item input[type="checkbox"] { accent-color: #3c7d3c; width: 15px; height: 15px; cursor: pointer; flex-shrink: 0; }
-  .service-label { font-size: 12.5px; color: #303030; line-height: 1.3; cursor: pointer; }
-  .service-price { font-weight: 600; color: #3c7d3c; }
-  .selected-summary { background: #f9fafb; border-top: 1px solid #e5e5e5; padding: 12px 28px; min-height: 44px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .summary-label { font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
-  .summary-tags { display: flex; flex-wrap: wrap; gap: 5px; }
-  .tag { background: #3c7d3c; color: #fff; font-size: 11px; padding: 3px 8px; border-radius: 20px; white-space: nowrap; }
-  .no-selection { font-size: 12px; color: #bbb; font-style: italic; }
-  .popup-footer { padding: 14px 28px; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #eee; }
-  .btn { padding: 9px 24px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: opacity 0.15s; }
-  .btn:hover { opacity: 0.88; }
-  .btn-cancel { background: #f0f0f0; color: #555; }
-  .btn-save { background: #3c7d3c; color: #fff; }
-  .btn-save:disabled { background: #aaa; cursor: not-allowed; }
-  .status-msg { font-size: 12px; color: #888; align-self: center; margin-right: auto; }
-  .status-msg.success { color: #3c7d3c; font-weight: 600; }
-  .status-msg.error { color: #c0392b; font-weight: 600; }
-  .popup-body::-webkit-scrollbar { width: 5px; }
-  .popup-body::-webkit-scrollbar-track { background: #f5f5f5; }
-  .popup-body::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
-</style>
-</head>
-<body>
-<div class="popup">
-  <div class="popup-header">
-    <div>
-      <h2>Select Services</h2>
-      <div class="deal-info" id="dealInfo">Loading deal info...</div>
-    </div>
-  </div>
-
-  <div class="popup-body">
-
-    <div class="category">
-      <div class="category-title">PAYG Tax Returns</div>
-      <div class="services-grid">
-        <label class="service-item"><input type="checkbox" value="Student Low Income Tax Return ($79)"><span class="service-label">Student Low Income <span class="service-price">$79</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Tax Return Basic ($99)"><span class="service-label">Tax Return Basic <span class="service-price">$99</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Special Pricing ($110)"><span class="service-label">Special Pricing <span class="service-price">$110</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Standard Tax Return ($149)"><span class="service-label">Standard Tax Return <span class="service-price">$149</span></span></label>
-       <label class="service-item"><input type="checkbox" value="Special ($89)"><span class="service-label">Special <span class="service-price">$89</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Standard Plus Tax Return ($199)"><span class="service-label">Standard Plus Tax Return <span class="service-price">$199</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Extra Deductions ($29)"><span class="service-label">Extra Deductions <span class="service-price">$29</span></span></label>
-       <label class="service-item"><input type="checkbox" value="Special Pricing ($89)"><span class="service-label">Special Pricing <span class="service-price">$89</span></span></label>
-      </div>
-    </div>
-
-    <div class="category">
-      <div class="category-title">Working Holiday Visa</div>
-      <div class="services-grid">
-        <label class="service-item"><input type="checkbox" value="Simple WHM ($99)"><span class="service-label">Simple WHM <span class="service-price">$99</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Standard WHM ($129)"><span class="service-label">Standard WHM <span class="service-price">$129</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Complex WHM ($149)"><span class="service-label">Complex WHM <span class="service-price">$149</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Client left Australia ($199)"><span class="service-label">Client left Australia <span class="service-price">$199</span></span></label>
-        <label class="service-item"><input type="checkbox" value="ABN Cash income Sole Trader ($299)"><span class="service-label">ABN Cash income Sole Trader <span class="service-price">$299</span></span></label>
-      </div>
-    </div>
-
-    <div class="category">
-      <div class="category-title">Property &amp; Investment Returns</div>
-      <div class="services-grid">
-        <label class="service-item"><input type="checkbox" value="Rental Property add-on ($149)"><span class="service-label">Rental Property add-on <span class="service-price">$149</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Additional Property ($99)"><span class="service-label">Additional Property <span class="service-price">$99</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Airbnb short-stay rental ($149)"><span class="service-label">Airbnb short-stay rental <span class="service-price">$149</span></span></label>
-      </div>
-    </div>
-
-    <div class="category">
-      <div class="category-title">Capital Gains Return</div>
-      <div class="services-grid">
-        <label class="service-item"><input type="checkbox" value="Simple CGT Tax returns ($99)"><span class="service-label">Simple CGT <span class="service-price">$99</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Shares CGT Multiple ($149)"><span class="service-label">Shares CGT (Multiple) <span class="service-price">$149</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Cryto-only Reporting($20)"><span class="service-label">Cryto-Only Reporting <span class="service-price">$20</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Crypto CGT ($199)"><span class="service-label">Crypto CGT <span class="service-price">$199</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Property Capital Gains Tax ($199)"><span class="service-label">Property Capital Gains Tax <span class="service-price">$199</span></span></label>
-      </div>
-    </div>
-
-    <div class="category">
-      <div class="category-title">Business / ABN Returns</div>
-      <div class="services-grid">
-        <label class="service-item"><input type="checkbox" value="Sole Trader Simple Return ($199)"><span class="service-label">Sole Trader Simple Return <span class="service-price">$199</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Sole Trader Standard Return ($299)"><span class="service-label">Sole Trader Standard Return <span class="service-price">$299</span></span></label>
-         <label class="service-item"><input type="checkbox" value="Uber rideshare ($199)"><span class="service-label">Uber rideshare <span class="service-price">$199</span></span></label>
-       <label class="service-item"><input type="checkbox" value="ABN/Uber Reporting (&49)"><span class="service-label">ABN/Uber Reporting <span class="service-price">$49</span></span></label>
-        <label class="service-item"><input type="checkbox" value="BAS Tax Return ($99)"><span class="service-label">BAS Tax Return <span class="service-price">$99</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Annual Tax Package ($499)"><span class="service-label">Annual Tax Package <span class="service-price">$499</span></span></label>
-      </div>
-    </div>
-
-    <div class="category">
-      <div class="category-title">Other Services</div>
-      <div class="services-grid">
-        <label class="service-item"><input type="checkbox" value="Amended Tax Return ($49)"><span class="service-label">Amended Tax Return <span class="service-price">$49</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Tax Return NIL ($39)"><span class="service-label">Tax Return NIL <span class="service-price">$39</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Fee from Refund - in Australia ($49)"><span class="service-label">Fee from Refund - Australia <span class="service-price">$49</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Fee from refund - Overseas ($99)"><span class="service-label">Fee from Refund - Overseas <span class="service-price">$99</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Tax planning session ($299)"><span class="service-label">Tax planning session <span class="service-price">$299</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Medicare Exemption ($15)"><span class="service-label">Medicare Exemption <span class="service-price">$15</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Office Appointment ($49)"><span class="service-label">Office Appointment <span class="service-price">$49</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Super Fund DASP ($299)"><span class="service-label">Super Fund DASP <span class="service-price">$299</span></span></label>
-        <label class="service-item"><input type="checkbox" value="Payment Plan ($60)"><span class="service-label">Payment Plan <span class="service-price">$60</span></span></label>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="selected-summary">
-    <span class="summary-label">Selected:</span>
-    <div class="summary-tags" id="summaryTags">
-      <span class="no-selection">None selected</span>
-    </div>
-  </div>
-
-  <div class="popup-footer">
-    <span class="status-msg" id="statusMsg"></span>
-    <button class="btn btn-cancel" onclick="window.close()">Cancel</button>
-    <button class="btn btn-save" id="saveBtn" onclick="saveServices()">Save to Deal</button>
-  </div>
-</div>
-
-<script>
-  const params   = new URLSearchParams(window.location.search);
-  const dealId   = params.get('dealid') || params.get('id') || '';
-  const dealName = params.get('dealname') || '';
-
-  document.getElementById('dealInfo').textContent =
-    dealName ? 'Deal: ' + dealName : dealId ? 'Deal ID: ' + dealId : 'No Deal ID detected — check button URL';
-
-  document.querySelectorAll('.service-item input[type="checkbox"]').forEach(function(cb) {
-    cb.addEventListener('change', function() {
-      cb.closest('.service-item').classList.toggle('selected', cb.checked);
-      updateSummary();
-    });
-  });
-
-  const currentRaw = params.get('current') || '';
-  if (currentRaw) {
-    const currentServices = currentRaw.split(';').map(function(s) { return s.trim(); });
-    document.querySelectorAll('.service-item input[type="checkbox"]').forEach(function(cb) {
-      if (currentServices.indexOf(cb.value) > -1) {
-        cb.checked = true;
-        cb.closest('.service-item').classList.add('selected');
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Select Services</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
-    });
-    updateSummary();
-  }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+        padding: 20px;
+      }
+      .popup {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.13);
+        width: 100%;
+        max-width: 860px;
+        overflow: hidden;
+      }
+      .popup-header {
+        background: #303030;
+        color: #fff;
+        padding: 18px 28px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .popup-header h2 {
+        font-size: 18px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+      }
+      .deal-info {
+        font-size: 12px;
+        color: #aaa;
+        margin-top: 3px;
+      }
+      .popup-body {
+        padding: 22px 28px 10px;
+        max-height: 520px;
+        overflow-y: auto;
+      }
+      .category {
+        margin-bottom: 20px;
+      }
+      .category-title {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: #3c7d3c;
+        border-bottom: 2px solid #3c7d3c;
+        padding-bottom: 5px;
+        margin-bottom: 10px;
+      }
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px 12px;
+      }
+      .service-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.15s;
+        border: 1.5px solid transparent;
+      }
+      .service-item:hover {
+        background: #f0f7f0;
+        border-color: #b8d8b8;
+      }
+      .service-item.selected {
+        background: #e8f5e8;
+        border-color: #3c7d3c;
+      }
+      .service-item input[type="checkbox"] {
+        accent-color: #3c7d3c;
+        width: 15px;
+        height: 15px;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .service-label {
+        font-size: 12.5px;
+        color: #303030;
+        line-height: 1.3;
+        cursor: pointer;
+      }
+      .service-price {
+        font-weight: 600;
+        color: #3c7d3c;
+      }
+      .selected-summary {
+        background: #f9fafb;
+        border-top: 1px solid #e5e5e5;
+        padding: 12px 28px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .summary-label {
+        font-size: 11px;
+        font-weight: 700;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+      }
+      .summary-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      .tag {
+        background: #3c7d3c;
+        color: #fff;
+        font-size: 11px;
+        padding: 3px 8px;
+        border-radius: 20px;
+        white-space: nowrap;
+      }
+      .no-selection {
+        font-size: 12px;
+        color: #bbb;
+        font-style: italic;
+      }
+      .popup-footer {
+        padding: 14px 28px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        border-top: 1px solid #eee;
+      }
+      .btn {
+        padding: 9px 24px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: opacity 0.15s;
+      }
+      .btn:hover {
+        opacity: 0.88;
+      }
+      .btn-cancel {
+        background: #f0f0f0;
+        color: #555;
+      }
+      .btn-save {
+        background: #3c7d3c;
+        color: #fff;
+      }
+      .btn-save:disabled {
+        background: #aaa;
+        cursor: not-allowed;
+      }
+      .status-msg {
+        font-size: 12px;
+        color: #888;
+        align-self: center;
+        margin-right: auto;
+      }
+      .status-msg.success {
+        color: #3c7d3c;
+        font-weight: 600;
+      }
+      .status-msg.error {
+        color: #c0392b;
+        font-weight: 600;
+      }
+      .popup-body::-webkit-scrollbar {
+        width: 5px;
+      }
+      .popup-body::-webkit-scrollbar-track {
+        background: #f5f5f5;
+      }
+      .popup-body::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="popup">
+      <div class="popup-header">
+        <div>
+          <h2>Select Services</h2>
+          <div class="deal-info" id="dealInfo">Loading deal info...</div>
+        </div>
+      </div>
 
-  function updateSummary() {
-    const checked = Array.from(document.querySelectorAll('.service-item input:checked'));
-    const tagsEl  = document.getElementById('summaryTags');
-    if (checked.length === 0) {
-      tagsEl.innerHTML = '<span class="no-selection">None selected</span>';
-    } else {
-      tagsEl.innerHTML = checked.map(function(c) {
-        return '<span class="tag">' + c.value + '</span>';
-      }).join('');
-    }
-  }
+      <div class="popup-body">
+        <div class="category">
+          <div class="category-title">PAYG Tax Returns</div>
+          <div class="services-grid">
+            <label class="service-item"
+              ><input
+                type="checkbox"
+                value="Student Low Income Tax Return ($79)"
+              /><span class="service-label"
+                >Student Low Income <span class="service-price">$79</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="Tax Return Basic ($99)" /><span
+                class="service-label"
+                >Tax Return Basic <span class="service-price">$99</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="Special Pricing ($110)" /><span
+                class="service-label"
+                >Special Pricing <span class="service-price">$110</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="Standard Tax Return ($149)" /><span
+                class="service-label"
+                >Standard Tax Return
+                <span class="service-price">$149</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="Special ($89)" /><span
+                class="service-label"
+                >Special <span class="service-price">$89</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input
+                type="checkbox"
+                value="Standard Plus Tax Return ($199)"
+              /><span class="service-label"
+                >Standard Plus Tax Return
+                <span class="service-price">$199</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="Extra Deductions ($29)" /><span
+                class="service-label"
+                >Extra Deductions <span class="service-price">$29</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="Special Pricing ($89)" /><span
+                class="service-label"
+                >Special Pricing <span class="service-price">$89</span></span
+              ></label
+            >
+          </div>
+        </div>
 
-  function saveServices() {
-    const checked = Array.from(document.querySelectorAll('.service-item input:checked'));
-    if (checked.length === 0) { setStatus('Please select at least one service.', 'error'); return; }
-    if (!dealId) { setStatus('No Deal ID found. Close and reopen from the Deal record.', 'error'); return; }
+        <div class="category">
+          <div class="category-title">Working Holiday Visa</div>
+          <div class="services-grid">
+            <label class="service-item"
+              ><input type="checkbox" value="Simple WHM ($99)" /><span
+                class="service-label"
+                >Simple WHM <span class="service-price">$99</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="Standard WHM ($129)" /><span
+                class="service-label"
+                >Standard WHM <span class="service-price">$129</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="Complex WHM ($149)" /><span
+                class="service-label"
+                >Complex WHM <span class="service-price">$149</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input
+                type="checkbox"
+                value="Client left Australia ($199)"
+              /><span class="service-label"
+                >Client left Australia
+                <span class="service-price">$199</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input
+                type="checkbox"
+                value="ABN Cash income Sole Trader ($299)"
+              /><span class="service-label"
+                >ABN Cash income Sole Trader
+                <span class="service-price">$299</span></span
+              ></label
+            >
+          </div>
+        </div>
 
-    const saveBtn = document.getElementById('saveBtn');
-    saveBtn.disabled = true;
-    saveBtn.textContent = 'Saving...';
-    setStatus('', '');
+        <div class="category">
+          <div class="category-title">Property &amp; Investment Returns</div>
+          <div class="services-grid">
+            <label class="service-item"
+              ><input
+                type="checkbox"
+                value="Rental Property add-on ($149)"
+              /><span class="service-label"
+                >Rental Property add-on
+                <span class="service-price">$149</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="Additional Property ($99)" /><span
+                class="service-label"
+                >Additional Property
+                <span class="service-price">$99</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input
+                type="checkbox"
+                value="Airbnb short-stay rental ($149)"
+              /><span class="service-label"
+                >Airbnb short-stay rental
+                <span class="service-price">$149</span></span
+              ></label
+            >
+          </div>
+        </div>
 
-    const serviceValue = JSON.stringify(checked.map(function(c) { return c.value; }));
-    const webhookUrl = 'https://flow.zoho.com/708863980/flow/webhook/incoming?zapikey=1001.43514faac1023cef9c7ff70131113150.d7e41b8eafa354f152a2bf8fb56d8631&isdebug=false';
+        <div class="category">
+          <div class="category-title">Capital Gains Return</div>
+          <div class="services-grid">
+            <label class="service-item"
+              ><input
+                type="checkbox"
+                value="Simple CGT Tax returns ($99)"
+              /><span class="service-label"
+                >Simple CGT <span class="service-price">$99</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="Shares CGT Multiple ($149)" /><span
+                class="service-label"
+                >Shares CGT (Multiple)
+                <span class="service-price">$149</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="Cryto-only Reporting($20)" /><span
+                class="service-label"
+                >Cryto-Only Reporting
+                <span class="service-price">$20</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="Crypto CGT ($199)" /><span
+                class="service-label"
+                >Crypto CGT <span class="service-price">$199</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input
+                type="checkbox"
+                value="Property Capital Gains Tax ($199)"
+              /><span class="service-label"
+                >Property Capital Gains Tax
+                <span class="service-price">$199</span></span
+              ></label
+            >
+          </div>
+        </div>
 
-    const oldFrame = document.getElementById('hidden_frame');
-    const oldForm  = document.getElementById('hidden_form');
-    if (oldFrame) oldFrame.remove();
-    if (oldForm)  oldForm.remove();
+        <div class="category">
+          <div class="category-title">Business / ABN Returns</div>
+          <div class="services-grid">
+            <label class="service-item"
+              ><input
+                type="checkbox"
+                value="Sole Trader Simple Return ($199)"
+              /><span class="service-label"
+                >Sole Trader Simple Return
+                <span class="service-price">$199</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input
+                type="checkbox"
+                value="Sole Trader Standard Return ($299)"
+              /><span class="service-label"
+                >Sole Trader Standard Return
+                <span class="service-price">$299</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="Uber rideshare ($199)" /><span
+                class="service-label"
+                >Uber rideshare <span class="service-price">$199</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="ABN/Uber Reporting (&49)" /><span
+                class="service-label"
+                >ABN/Uber Reporting <span class="service-price">$49</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="BAS Tax Return ($99)" /><span
+                class="service-label"
+                >BAS Tax Return <span class="service-price">$99</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="Annual Tax Package ($499)" /><span
+                class="service-label"
+                >Annual Tax Package
+                <span class="service-price">$499</span></span
+              ></label
+            >
+          </div>
+        </div>
 
-    const iframe = document.createElement('iframe');
-    iframe.id   = 'hidden_frame';
-    iframe.name = 'hidden_frame';
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
+        <div class="category">
+          <div class="category-title">Other Services</div>
+          <div class="services-grid">
+            <label class="service-item"
+              ><input type="checkbox" value="Amended Tax Return ($49)" /><span
+                class="service-label"
+                >Amended Tax Return <span class="service-price">$49</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="Tax Return NIL ($39)" /><span
+                class="service-label"
+                >Tax Return NIL <span class="service-price">$39</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input
+                type="checkbox"
+                value="Fee from Refund - in Australia ($49)"
+              /><span class="service-label"
+                >Fee from Refund - Australia
+                <span class="service-price">$49</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input
+                type="checkbox"
+                value="Fee from refund - Overseas ($99)"
+              /><span class="service-label"
+                >Fee from Refund - Overseas
+                <span class="service-price">$99</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input
+                type="checkbox"
+                value="Tax planning session ($299)"
+              /><span class="service-label"
+                >Tax planning session
+                <span class="service-price">$299</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="Medicare Exemption ($15)" /><span
+                class="service-label"
+                >Medicare Exemption <span class="service-price">$15</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="Office Appointment ($49)" /><span
+                class="service-label"
+                >Office Appointment <span class="service-price">$49</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="Super Fund DASP ($299)" /><span
+                class="service-label"
+                >Super Fund DASP <span class="service-price">$299</span></span
+              ></label
+            >
+            <label class="service-item"
+              ><input type="checkbox" value="Payment Plan ($60)" /><span
+                class="service-label"
+                >Payment Plan <span class="service-price">$60</span></span
+              ></label
+            >
+          </div>
+        </div>
+      </div>
 
-    const form = document.createElement('form');
-    form.id     = 'hidden_form';
-    form.method = 'POST';
-    form.action = webhookUrl;
-    form.target = 'hidden_frame';
-    form.style.display = 'none';
+      <div class="selected-summary">
+        <span class="summary-label">Selected:</span>
+        <div class="summary-tags" id="summaryTags">
+          <span class="no-selection">None selected</span>
+        </div>
+      </div>
 
-    const f1 = document.createElement('input');
-    f1.type  = 'hidden';
-    f1.name  = 'dealid';
-    f1.value = dealId.toString().replace(/[^0-9]/g, '');
-    form.appendChild(f1);
+      <div class="popup-footer">
+        <span class="status-msg" id="statusMsg"></span>
+        <button class="btn btn-cancel" onclick="window.close()">Cancel</button>
+        <button class="btn btn-save" id="saveBtn" onclick="saveServices()">
+          Save to Deal
+        </button>
+      </div>
+    </div>
 
-    const f2 = document.createElement('input');
-    f2.type  = 'hidden';
-    f2.name  = 'services';
-    f2.value = serviceValue;
-    form.appendChild(f2);
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const dealId = params.get("dealid") || params.get("id") || "";
+      const dealName = params.get("dealname") || "";
 
-    document.body.appendChild(form);
-    form.submit();
+      document.getElementById("dealInfo").textContent = dealName
+        ? "Deal: " + dealName
+        : dealId
+          ? "Deal ID: " + dealId
+          : "No Deal ID detected — check button URL";
 
-    setTimeout(function() {
-      setStatus('✓ Services saved successfully!', 'success');
-      saveBtn.textContent = 'Saved ✓';
-      setTimeout(function() { window.close(); }, 1500);
-    }, 1000);
-  }
+      document
+        .querySelectorAll('.service-item input[type="checkbox"]')
+        .forEach(function (cb) {
+          cb.addEventListener("change", function () {
+            cb.closest(".service-item").classList.toggle(
+              "selected",
+              cb.checked,
+            );
+            updateSummary();
+          });
+        });
 
-  function setStatus(msg, type) {
-    const el = document.getElementById('statusMsg');
-    el.textContent = msg;
-    el.className = 'status-msg ' + (type || '');
-  }
-</script>
-</body>
+      const currentRaw = params.get("current") || "";
+      if (currentRaw) {
+        const currentServices = currentRaw.split(";").map(function (s) {
+          return s.trim();
+        });
+        document
+          .querySelectorAll('.service-item input[type="checkbox"]')
+          .forEach(function (cb) {
+            if (currentServices.indexOf(cb.value) > -1) {
+              cb.checked = true;
+              cb.closest(".service-item").classList.add("selected");
+            }
+          });
+        updateSummary();
+      }
+
+      function updateSummary() {
+        const checked = Array.from(
+          document.querySelectorAll(".service-item input:checked"),
+        );
+        const tagsEl = document.getElementById("summaryTags");
+        if (checked.length === 0) {
+          tagsEl.innerHTML = '<span class="no-selection">None selected</span>';
+        } else {
+          tagsEl.innerHTML = checked
+            .map(function (c) {
+              return '<span class="tag">' + c.value + "</span>";
+            })
+            .join("");
+        }
+      }
+
+      function saveServices() {
+        const checked = Array.from(
+          document.querySelectorAll(".service-item input:checked"),
+        );
+        if (checked.length === 0) {
+          setStatus("Please select at least one service.", "error");
+          return;
+        }
+        if (!dealId) {
+          setStatus(
+            "No Deal ID found. Close and reopen from the Deal record.",
+            "error",
+          );
+          return;
+        }
+
+        const saveBtn = document.getElementById("saveBtn");
+        saveBtn.disabled = true;
+        saveBtn.textContent = "Saving...";
+        setStatus("", "");
+
+        const serviceValue = JSON.stringify(
+          checked.map(function (c) {
+            return c.value;
+          }),
+        );
+        const webhookUrl =
+          "https://flow.zoho.com/708863980/flow/webhook/incoming?zapikey=1001.43514faac1023cef9c7ff70131113150.d7e41b8eafa354f152a2bf8fb56d8631&isdebug=false";
+
+        const oldFrame = document.getElementById("hidden_frame");
+        const oldForm = document.getElementById("hidden_form");
+        if (oldFrame) oldFrame.remove();
+        if (oldForm) oldForm.remove();
+
+        const iframe = document.createElement("iframe");
+        iframe.id = "hidden_frame";
+        iframe.name = "hidden_frame";
+        iframe.style.display = "none";
+        document.body.appendChild(iframe);
+
+        const form = document.createElement("form");
+        form.id = "hidden_form";
+        form.method = "POST";
+        form.action = webhookUrl;
+        form.target = "hidden_frame";
+        form.style.display = "none";
+
+        const f1 = document.createElement("input");
+        f1.type = "hidden";
+        f1.name = "dealid";
+        f1.value = dealId.toString().replace(/[^0-9]/g, "");
+        form.appendChild(f1);
+
+        const f2 = document.createElement("input");
+        f2.type = "hidden";
+        f2.name = "services";
+        f2.value = serviceValue;
+        form.appendChild(f2);
+
+        document.body.appendChild(form);
+        form.submit();
+
+        setTimeout(function () {
+          setStatus("✓ Services saved successfully!", "success");
+          saveBtn.textContent = "Saved ✓";
+          setTimeout(function () {
+            window.close();
+          }, 1500);
+        }, 1000);
+      }
+
+      function setStatus(msg, type) {
+        const el = document.getElementById("statusMsg");
+        el.textContent = msg;
+        el.className = "status-msg " + (type || "");
+      }
+    </script>
+  </body>
 </html>
